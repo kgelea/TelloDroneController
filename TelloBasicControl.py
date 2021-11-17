@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# This program will be able to control the drone with the WASD keys
 from djitellopy import Tello
 import cv2, math, time
 

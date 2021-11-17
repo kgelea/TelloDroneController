@@ -20,6 +20,11 @@ Just search for RawDataBot and send any message (hi will do). Take a note of you
 Now search for BotFather and send the message /start. Help is displayed. 
 Send the message /newbot and follow the instructions. 
 Take a note of your token to access the HTTP API
+
+TELEGRAM E-CHANNEL ID FOR WEDS
+Alina: 923197636
+Dani: 2140059741
+Sofien: 2132359615
 """
 
 import requests
@@ -28,6 +33,6 @@ token = "2127036493:AAFzTiQxgRNerbsNAD__4NqpWyumUttImL0"
 
 url = f"https://api.telegram.org/bot{token}" # Here comes the token from step 4
 
-params = {"chat_id": "2140059741", "text": "There's a fucking fire get your ass out!"} # Here comes the token from step 3
+params = {"chat_id": "923197636", "text": "Did u get this message?"} # Here comes the token from step 3
 
 r = requests.get(url + "/sendMessage", params=params)
