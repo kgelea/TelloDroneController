@@ -28,7 +28,6 @@ Mariam: 2144912667
 """
 
 import requests
-import cv2
 
 def send_notifications(ids, text, photo):
     token = "2127036493:AAFzTiQxgRNerbsNAD__4NqpWyumUttImL0"
