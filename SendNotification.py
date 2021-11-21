@@ -38,7 +38,8 @@ def send_notifications(ids, text, photoname):
         params = {"chat_id": idx, "text": text} # Here comes the token from step 3
         r = requests.get(url + "/sendPhoto", params=params, files=photo)
         print(r.status_code, r.reason, r.content)
-
+        print()
+        
 #ids = ['923197636', '2140059741', '2132359615', '2144912667']
 ids = ['2140059741', '2144912667'] # This will contain the Telegram IDs to send messages to 
 text = 'Fire in the hole!' # What message should be sent
