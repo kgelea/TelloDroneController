@@ -13,6 +13,9 @@ The drone will take off, take 4 pictures in each direction (forward, backward, l
 The leaded torchvision model evalates the pictures, depending if it's fire or not.
 If there's a fire showing up on any of the photos, the drone will send notification to a specified group of people.
 Notification sending works by commanding a previously defined telegram bot controlled by HTTP requests. 
+For connection with wifi settings refer to wifitest.py
+
+TODO: add customizable mission to program e.g. mission library 
 """
 
 #%% Libraries used
@@ -23,10 +26,15 @@ import cv2
 import os
 import math
 import time
+import winwifi
 import torch
 import torchvision
 from torchvision import transforms
 from djitellopy import Tello
+
+rootdir = 'C:/Users/Daniel Kuknyo/Documents/GitHub/TelloDroneController/'
+imgdir = rootdir + 'Images/'
+os.chdir(rootdir) # Can be any directory, but needs an Images subfolder
 
 
 #%% Read model file into torchvision
@@ -40,7 +48,7 @@ img_transforms = transforms.Compose([transforms.ToTensor(),
 
 #%% This function will send notifications to a specified group
 group = {'Alina': '923197636', 'Dani': '2140059741', 'Mariam': '2144912667', 'Sofien': '2132359615'}
-names = ['Dani', 'Mariam'] # This will contain the Telegram IDs to send messages to 
+names = ['Dani', 'Mariam', 'Sofien'] # This will contain the Telegram IDs to send messages to 
 text = 'Fire in the hole!' # What message should be sent
 
 def send_notifications(names, text, photoname):
@@ -56,41 +64,41 @@ def send_notifications(names, text, photoname):
         print()
         
 
-#%% Estabilish connection
+#%% Estabilish connection###################################################### Mission start
 tello = Tello()
 tello.connect()
-images = []
 init_imname = 'droneimg_'
 
 
 #%% Turn on video
 tello.streamon()
-frame_read = tello.get_frame_read()
-cv2.imshow("drone", frame_read.frame)
-images.append(frame_read.frame)
+frame_read = tello.get_frame_read().frame
+cv2.imwrite(init_imname + "init", frame_read)
 
 
 #%% Complete the mission
+num_iter = 4
 tello.streamon()
-
 tello.takeoff()
 
-for i in range(4):
+for i in range(num_iter):
     time.sleep(20) # wait 10 seconds
     image = tello.get_frame_read().frame
-    images.append(image)
-    tello.rotate_clockwise(90)
+    cv2.imwrite(init_imname + str(i), frame_read)
+    tello.rotate_counter_clockwise(90)
 
 tello.land()
 
 
-#%% Write images into file
+#%% Read images into file###################################################### Mission end
+images = []
 directory = 'Images/'
 fbase = directory + init_imname
 
-for i,img in enumerate(images):
+for i in range(num_iter):
     fname = fbase + str(i) + '.jpg'
-    cv2.imwrite(fname, img)
+    img = cv2.imread(fname)
+    images.append(img)
     
 
 #%% Iterate over the images using torchvision model 
@@ -105,6 +113,8 @@ for filename in os.listdir(directory):
         
         
 #%% Iterate over predictions to check if there's a fire
+winwifi.WinWiFi.connect('Kknet') # Connect to Wifi with gateway to internet
+
 for key in preds.keys():
     photoname = directory + key
     if (model[key] == 1): # There's a fire

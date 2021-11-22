@@ -3,36 +3,11 @@
 Created on Sun Nov 21 15:40:44 2021
 
 @author: Daniel Kuknyo
+
+This is the method to connect to a WiFi network using Python
+The network has to be saved with password for the computer that runs the program
 """
 
-# -*- coding: utf-8 -*-
-# This program will make the drone take off, and take a picture in every direcetion
-from djitellopy import Tello
-import cv2, math, time
-import matplotlib.pyplot as plt
+import winwifi
 
-#%% Estabilish connection
-tello = Tello()
-
-#%%
-tello.connect()
-
-#%% Turn on video
-tello.streamon()
-
-#%%
-images = []
-
-for i in range(10):
-    frame_read = tello.get_frame_read()
-    print('done', i)
-    images.append(frame_read.frame)
-    
-    
-#%% 
-tello.streamoff()
-
-#%%
-
-cv2.imshow("drone", frame_read.frame)
-cv2.waitKey(0)
+winwifi.WinWiFi.connect('Kknet')
