@@ -25,6 +25,7 @@ Alina: 923197636
 Dani: 2140059741
 Sofien: 2132359615
 Mariam: 2144912667
+Gellert: 2116813835
 """
 
 import requests
